@@ -41,7 +41,7 @@
         }
         .infoDiv {
             height: auto;
-            max-width: 240px;
+            /*max-width: 240px;*/
             -webkit-user-select: none;
             background-color: white;
         }
@@ -53,10 +53,16 @@
         .etc {
             font-size:9pt;
         }
+        h1 {
+            font-size:12pt;
+        }
     </style>
 </head>
 
 <body>
+    <h1>
+        <strong>郡山クリームボックスマップ</strong>
+    </h1>
     <div id="map"></div>
     <div id="message"></div>
     <script>
@@ -99,12 +105,15 @@
         }
 
         //undefinedの判定
-        function isUndefined(data) {
+        function isUndefined(titile,data) {
 
             if (data == undefined) {
                 return "";
             }
-            return data;
+            if (titile == "") {
+                return data;
+            }
+            return titile + ":" + data;
         }
 
        window.onload =function() {
@@ -124,11 +133,11 @@
                   var map = new google.maps.Map(document.getElementById('map'), options);
 
                   //現在地マーカー表示
-                  var marker = new google.maps.Marker({
-                      position: latlng,
-                      map: map,
-                      title: '現在地'
-                  });
+                  //var marker = new google.maps.Marker({
+                  //    position: latlng,
+                  //    map: map,
+                  //    title: '現在地'
+                  //});
 
                   //jsonデータの読み込み
                   $.ajax({
@@ -145,28 +154,38 @@
                               var marker = new google.maps.Marker({
                                   position: new google.maps.LatLng(item.lat, item.long),
                                   map: map,
-                                  //title: item.basuteimei
+                                  title: item.StoreName
                               });
 
                               //アイコン変更
-                              //marker.setIcon('/Image/basu_aka.png');
+                              if (item.Shape == "丸") {
+                                  marker.setIcon('/img/creambox_maru_huto.png');
+                              } else {
+                                  marker.setIcon('/img/creambox_kaku_huto.png');
+                              }
 
                               var flag = location.search;
 
-                              var contentStr = '<div class="infoDiv"><span class="storename">' + isUndefined(item.StoreName) + '</span>' +
-                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined(item.Kana) + '</span>' +
-                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined(item.PostalCode) + '&nbsp:' + isUndefined(item.Address) + '</span>' +
-                                               '<span class="etc"><hr style="margin:0px;">TEL:' + isUndefined(item.Tel) + '&nbsp:FAX:' + isUndefined(item.Fax) + '</span>' +
-                                               '<span class="etc"><hr style="margin:0px;">定休日:' + isUndefined(item.Holiday) + '&nbsp;' + isUndefined(item.BusinessHours) + '</span>' +
-                                               '<span class="etc"><hr style="margin:0px;">代表メニュー:' + isUndefined(item.MainMenu) + '</span>' +
-                                               '<span class="etc"><hr style="margin:0px;">クリームボックス価格:' + isUndefined(item.Price) + '</span>' +
-                                               '<span class="etc"><hr style="margin:0px;">こだわり:' + isUndefined(item.GoodPoint) + '</span>' +
-                                               '<span class="etc"><hr style="margin:0px;">味の特徴:' + isUndefined(item.Taste) + '</span>' +
-                                               '<span class="etc"><hr style="margin:0px;">サイズ:' + isUndefined(item.Size) + '&nbsp;厚さ:' + isUndefined(item.Thickness) + '&nbsp;形:' + isUndefined(item.Shape) + '</span>' +
-                                               '<span class="etc"><hr style="margin:0px;">駐車場:' + isUndefined(item.Parking) + '&nbsp;イートイン:' + isUndefined(item.Eatin) + '&nbsp;創業:' + isUndefined(item.FoundedYear) + '</span>' +
-                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined(item.Comment) + '</span>' +
-                                               '<br><a href="' + isUndefined(item.HomePage) + '">HomePage</a>' + '&nbsp' +
-                                               '<a href="' + isUndefined(item.OtherLink) + '">Link</a></div>'
+                              //インフォメーションウインドウ文字列
+                              var contentStr = '<div class="infoDiv"><span class="storename">' + isUndefined("",item.StoreName) + '</span>' +
+                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined("", item.Kana) + '</span>' +
+                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined("", item.PostalCode) + '&nbsp;' + isUndefined("", item.Address) + '</span>' +
+                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined("TEL", item.Tel) + '&nbsp;' + isUndefined("FAX", item.Fax) + '</span>' +
+                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined("定休日", item.Holiday) + '&nbsp;' + isUndefined("", item.BusinessHours) + '</span>' +
+                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined("代表メニュー", item.MainMenu) + '</span>' +
+                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined("クリームボックス価格", item.Price) + '</span>' +
+                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined("こだわり", item.GoodPoint) + '</span>' +
+                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined("味の特徴", item.Taste) + '</span>' +
+                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined("サイズ", item.Size) + '&nbsp;' + isUndefined("厚さ", item.Thickness) + '&nbsp;' + isUndefined("形", item.Shape) + '</span>' +
+                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined("駐車場", item.Parking) + '&nbsp;' + isUndefined("イートイン", item.Eatin) + '&nbsp;' + isUndefined("創業", item.FoundedYear) + '</span>' +
+                                               '<span class="etc"><hr style="margin:0px;">' + isUndefined("", item.Comment) + '</span>';
+
+                              if (item.HomePage != undefined) {
+                                  contentStr += '<br><a href="' + isUndefined("", item.HomePage) + '" target="_blank">HomePage</a>';
+                              }
+                              if (item.OtherLink != undefined) {
+                                  contentStr += '<br><a href="' + isUndefined("", item.OtherLink) + '" target="_blank">Link</a>';
+                              }
 
 
                               //インフォメーションウインドウ
